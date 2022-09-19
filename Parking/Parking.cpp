@@ -1,78 +1,17 @@
 ﻿#include <iostream>
 #include <vector>
+#include <fstream>
+#include <string>
+#include "Car.h"
+#include "Bus.h"
+#include "Truck.h"
 using namespace std;
 
 unsigned short int max_car = 15, max_bus = 10, max_truck = 5;
-const double max_weight = 6.5;
-class Car
-{
-private:
-    string model;
-public:
+const double max_weight = 15;
+string path = "Data_base.txt";
 
-    Car(string _model) :model(_model)
-    {
-    }
-    Car() : Car("")
-    {
-    }
-    string GetModel() { return model; }
-    void SetModel(string _model)
-    {
-        this->model = _model;
-    }
-    void Print()
-    {
-        cout << "Модель: " << model << endl;
-    }
-};
 
-class Bus
-{
-private:
-    string model;
-    unsigned int seats;
-public:
-    Bus(string _model, int _seats) : model(_model), seats(_seats)
-    {
-    }
-    Bus() : Bus("", 0) {}
-    void Set(string _model, int _seats)
-    {
-        this->model = _model;
-        this->seats = _seats;
-    }
-    void Print()
-    {
-        cout << "Модель: " << model << ", сидінь: " << seats << endl;
-    }
-};
-
-class Truck
-{
-private:
-    string model;
-    double weight;
-public:
-    Truck(string _model, double _weight) : model(_model), weight(_weight)
-    {
-    }
-    Truck() : Truck("", 0) {}
-
-    void Set(string _model, double _weight)
-    {
-        this->model = _model;
-        this->weight = _weight;
-    }
-    double getWeight()
-    {
-        return this->weight;
-    }
-    void Print()
-    {
-        cout << "Модель: " << model << ", вага: " << weight << endl;
-    }
-};
 class Parking
 {
 private:
@@ -118,6 +57,7 @@ public:
             buff.SetModel(model);
             car.push_back(buff);
             cout << "\nCar added";
+            cout << "\nModel: " << model << endl;
         }
         else {
             cout << "\nThe parking lot is busy!";
@@ -130,7 +70,9 @@ public:
             Bus buff;
             buff.Set(model, seats);
             bus.push_back(buff);
-            cout << "\nBus added";
+            cout << "\nBus added:" << endl;
+            cout << "Model: " << model << endl;
+            cout << "Seats: " << seats << endl;
         }
         else {
             cout << "\nThe parking lot is busy!";
@@ -143,7 +85,9 @@ public:
             Truck buff;
             buff.Set(model, weight);
             trucks.push_back(buff);
-            cout << "\nTruck added";
+            cout << "\nTruck added:";
+            cout << "\nModel: " << model << endl;
+            cout << "Weight: " << weight << endl;
         }
         else {
             cout << "\nThe parking lot is busy or your truck too heavy!";
@@ -163,7 +107,7 @@ public:
             removeC(number);
         }
     }
-   
+
     void removeB(unsigned short int number)
     {
         if (number < bus.size()) {
@@ -177,39 +121,206 @@ public:
             removeB(number);
         }
     }
-    
+
     void removeT(unsigned short int number)
     {
         if (number < trucks.size()) {
             trucks.erase(trucks.begin() + number);
             cout << "\nThe truck left the parking lot";
         }
-        else { 
-            cout << "\nError, the number is the bigest than the number of cars"; 
+        else {
+            cout << "\nError, the number of car is less than the number you entered for remove car";
             cout << "\nInput new number --> ";
             cin >> number;
             removeT(number);
         }
     }
 
-    void info() 
+    void info()
     {
-        cout << "\nCar(s) on parking --> " << car.size();
-        cout << "\nBus(es) on parking --> " << bus.size();
-        cout << "\nTruck(s) on parking --> " << trucks.size();
+        infocar();
+        infobus();
+        infotruck();
+    }
+    void infocar()
+    {
+        cout << endl;
+        if (car.size() > 0) {
+            cout << "INFO ABOUT CAR(S)" << endl;
+            for (int i = 0; i < car.size(); i++)
+            {
+                Car buff = car[i];
+                cout << "\nCar:";
+                cout << "\nModel: " << buff.GetModel() << endl;
+            }
+        }
+        else cout << "There are no cars in the parking lot" << endl;
+    }
+
+    void infobus()
+    {
+        cout << endl;
+        if (bus.size() > 0) {
+            cout << "INFO ABOUT BUS(ES)" << endl;
+            for (int i = 0; i < bus.size(); i++)
+            {
+                Bus buff = bus[i];
+                cout << "\nBus:";
+                cout << "\nModel: " << buff.getModel() << endl;
+                cout << "Seats: " << buff.getSeats() << endl;
+            }
+        }
+        else cout << "There are no buses in the parking lot" << endl;
+    }
+
+    void infotruck()
+    {
+        cout << endl;
+        if (trucks.size() > 0) {
+            cout << "INFO ABOUT TRUCK(S)" << endl;
+            for (int i = 0; i < trucks.size(); i++)
+            {
+                Truck buff = trucks[i];
+                cout << "\nTruck:";
+                cout << "\nModel: " << buff.getModel() << endl;
+                cout << "Weight: " << buff.getWeight() << endl;
+            }
+        }
+        else cout << "There are no trucks in the parking lot" << endl;
+    }
+
+    void inData()
+    {
+        ofstream file;
+        file.open(path);
+        string str;
+        if (file.is_open()) {
+            for (size_t i = 0; i < car.size(); i++)
+            {
+                Car buff = car[i];
+                str = buff.GetModel();
+                file << str << " ";
+            }
+            file << "\n";
+            for (size_t i = 0; i < bus.size(); i++)
+            {
+                Bus buff = bus[i];
+                str = buff.getModel();
+                file << str << ".";
+                str = buff.getSeats();
+                file << str << " ";
+            }
+            file << "\n";
+            for (size_t i = 0; i < trucks.size(); i++)
+            {
+                Truck buff = trucks[i];
+                str = buff.getModel();
+                file << str << ".";
+                str = to_string(buff.getWeight());
+                file << str << " ";
+            }
+            file.close();
+        }
+        else cout << "Error! File could not be opened";
+    }
+    int i = 0;
+    int count = 1;
+    void outData()
+    {
+        cout << "The program reads the database:";
+        fstream file;
+        file.open(path, fstream::in | fstream::app | fstream::out);
+        string str;
+        if (file.is_open()) 
+        {
+            while (!file.eof()) 
+            {
+                getline(file, str);
+                size_t last_pos = 0;
+                size_t pos = 0;
+                string model;
+                int seats;
+                double weight;
+                switch (i) 
+                {
+                case 0:
+                    while (str.find(' ', pos + 1) != str.npos)
+                    {
+                        string model;
+                        pos = str.find(' ', pos + 1);
+                        model = str.substr(last_pos, pos - last_pos);
+                        last_pos = pos + 1;
+                        addCar(model);
+                    }
+                    i++;
+                    continue;
+                case 1:
+                    while (str.find(' ', pos + 1) != str.npos)
+                    {
+                        if (count % 2 != 0)
+                        {
+                            pos = str.find('.', pos + 1);
+                            model = str.substr(last_pos, pos - last_pos);
+                            last_pos = pos + 1;
+                            count++;
+                            continue;
+                        }
+                        else
+                        {
+                            pos = str.find(' ', pos + 1);
+                            seats = stoi(str.substr(last_pos, pos - last_pos));
+                            last_pos = pos + 1;
+                            count++;
+                        }
+                        addBus(model, seats);
+                    }
+                    i++;
+                    continue;
+                case 2:
+                    while (str.find(' ', pos + 1) != str.npos)
+                    {
+                        if (count % 2 != 0)
+                        {
+                            pos = str.find('.', pos + 1);
+                            model = str.substr(last_pos, pos - last_pos);
+                            last_pos = pos + 1;
+                            count++;
+                            continue;
+                        }
+                        else
+                        {
+                            pos = str.find(' ', pos + 1);
+                            weight = (double)stoi(str.substr(last_pos, pos - last_pos));
+                            last_pos = pos + 1;
+                            count++;
+                        }
+                        addTruck(model, weight);
+                    }
+                    break;
+                }
+            }
+        }
+        else cout << "Error open";
+        cout << "\nAll data is loaded" << endl;
+        file.close();
     }
 };
+
 
 int main()
 {
     Parking parking;
-    Car a("BMW");
-    Bus b("Bogdan", 30);
-    Truck c("Mersedes", 6);
-    parking.add(a);
-    parking.add(b);
-    parking.add(c);
-    parking.addCar("Tesla");
-    parking.removeC(10);
+    parking.outData();
+    //Car a("Tesla");
+    //Bus b("Tesla", 25);
+    //Truck c("Mersedes", 6);
+    //parking.add(a);
+    //parking.add(b);
+    //parking.add(c);
+    //parking.addCar("Tesla");
+    //parking.addCar("Mersedes");
+    //parking.addTruck("Tesla", 10.5);
+    //parking.addBus("Bogdan", 30);
     parking.info();
+    parking.inData();
 }
