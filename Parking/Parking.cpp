@@ -2,6 +2,7 @@
 #include <vector>
 #include <fstream>
 #include <string>
+#include <random>
 #include "Car.h"
 #include "Bus.h"
 #include "Truck.h"
@@ -11,6 +12,10 @@ unsigned short int max_car = 15, max_bus = 10, max_truck = 5;
 const double max_weight = 15;
 string path = "Data_base.txt";
 
+random_device random_devic;
+mt19937 generator(random_devic());
+uniform_int_distribution<> x(1, 100);
+uniform_int_distribution<> y(1, 100);
 
 class Parking
 {
@@ -134,6 +139,27 @@ public:
             cin >> number;
             removeT(number);
         }
+    }
+
+    void outCar(unsigned short int number)
+    {
+        car[number].x = x(generator);
+        car[number].y = y(generator);
+        car[number].info_out();
+    }
+
+    void outBus(unsigned short int number)
+    {
+        bus[number].x = x(generator);
+        bus[number].y = y(generator);
+        bus[number].info_out();
+    }
+
+    void outTruck(unsigned short int number)
+    {
+        trucks[number].x = x(generator);
+        trucks[number].y = y(generator);
+        trucks[number].info_out();
     }
 
     void info()
@@ -311,16 +337,8 @@ int main()
 {
     Parking parking;
     parking.outData();
-    //Car a("Tesla");
-    //Bus b("Tesla", 25);
-    //Truck c("Mersedes", 6);
-    //parking.add(a);
-    //parking.add(b);
-    //parking.add(c);
-    //parking.addCar("Tesla");
-    //parking.addCar("Mersedes");
-    //parking.addTruck("Tesla", 10.5);
-    //parking.addBus("Bogdan", 30);
-    parking.info();
+    parking.outCar(0);
+    parking.outCar(1);
+
     parking.inData();
 }

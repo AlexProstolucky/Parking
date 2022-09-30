@@ -28,3 +28,16 @@ string Bus::getSeats()
 {
 	return to_string(seats);
 }
+
+int Bus::set_out()
+{
+	return sqrt(pow((this->x - 0), 2.0) + pow((this->y - 0), 2.0));
+}
+
+void Bus::info_out()
+{
+	int dis = set_out();
+	if(dis > 0)
+		cout << "The distance between the station and the bus, models - " << model << " with the number of seats - " << seats << " this is (" << dis << ")!\n";
+	else cout << "Transportation in the parking!" << endl;
+}

@@ -28,3 +28,16 @@ void Truck::Print()
 {
 	cout << "Модель: " << model << ", вага: " << weight << endl;
 }
+
+int Truck::set_out()
+{
+	return sqrt(pow((this->x - 0), 2.0) + pow((this->y - 0), 2.0));
+}
+
+void Truck::info_out()
+{
+	int dis = set_out();
+	if (dis > 0)
+		cout << "The distance between the station and the truck, models - " << model << " with the carrying capacity - " << weight << " this is (" << dis << ")!\n";
+	else cout << "Transportation in the parking!" << endl;
+}

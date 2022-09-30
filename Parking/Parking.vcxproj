@@ -130,16 +130,12 @@
   <ItemGroup>
     <ClCompile Include="Bus.cpp" />
     <ClCompile Include="Car.cpp" />
-    <ClCompile Include="GPS.cpp" />
     <ClCompile Include="Parking.cpp" />
-    <ClCompile Include="Point.cpp" />
     <ClCompile Include="Truck.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bus.h" />
     <ClInclude Include="Car.h" />
-    <ClInclude Include="GPS.h" />
-    <ClInclude Include="Point.h" />
     <ClInclude Include="Truck.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
